@@ -3,6 +3,7 @@ const WHATSAPP_NUMBER = "919492300643"; // Business WhatsApp number with country
 function whatsappUrl(message) {
   return WHATSAPP_NUMBER ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}` : "";
 }
+let revealObserver = null;
 document.querySelectorAll(".nav-links").forEach(nav => {
   const storyLink = [...nav.querySelectorAll("a")].find(link => link.textContent.trim() === "Our Story");
   if (storyLink) storyLink.href = "story.html";
@@ -28,14 +29,36 @@ document.querySelectorAll("[data-whatsapp-message]").forEach(link => {
 const menuToggle = document.querySelector(".menu-toggle");
 const navLinks = document.querySelector(".nav-links");
 if (menuToggle && navLinks) {
-  menuToggle.addEventListener("click", () => {
-    const open = navLinks.classList.toggle("open");
+  navLinks.id = navLinks.id || "site-navigation";
+  menuToggle.setAttribute("aria-controls", navLinks.id);
+  menuToggle.setAttribute("aria-haspopup", "true");
+  function setMenuOpen(open) {
+    navLinks.classList.toggle("open", open);
+    menuToggle.classList.toggle("is-open", open);
     menuToggle.setAttribute("aria-expanded", String(open));
+    navLinks.setAttribute("aria-hidden", String(!open && window.matchMedia("(max-width: 620px)").matches));
     menuToggle.textContent = open ? "×" : "☰";
+  }
+  function closeMenu() { setMenuOpen(false); }
+  setMenuOpen(false);
+  menuToggle.addEventListener("click", () => setMenuOpen(!navLinks.classList.contains("open")));
+  navLinks.addEventListener("click", event => {
+    if (event.target.closest("a")) closeMenu();
   });
-  navLinks.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
-    navLinks.classList.remove("open"); menuToggle.setAttribute("aria-expanded", "false"); menuToggle.textContent = "☰";
-  }));
+  document.addEventListener("click", event => {
+    if (navLinks.classList.contains("open") && !navLinks.contains(event.target) && !menuToggle.contains(event.target)) closeMenu();
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && navLinks.classList.contains("open")) {
+      closeMenu();
+      menuToggle.focus();
+    }
+  });
+  window.addEventListener("resize", () => {
+    const mobile = window.matchMedia("(max-width: 620px)").matches;
+    if (!mobile) setMenuOpen(false);
+    else navLinks.setAttribute("aria-hidden", String(!navLinks.classList.contains("open")));
+  }, { passive: true });
 }
 function readWishlist() {
   try { return JSON.parse(localStorage.getItem("varnamWishlist") || "[]"); } catch { return []; }
@@ -192,7 +215,7 @@ if (detailPhoto) {
   document.querySelector("#lightboxPrev").addEventListener("click", () => changeGalleryImage(activeGalleryIndex - 1));
   document.querySelector("#lightboxNext").addEventListener("click", () => changeGalleryImage(activeGalleryIndex + 1));
   lightbox.addEventListener("click", event => {
-    if (event.target === lightbox) closeLightbox();
+    if (event.target === lightbox && !suppressLightboxClick) closeLightbox();
   });
   document.addEventListener("keydown", event => {
     if (!lightbox.classList.contains("is-open")) return;
@@ -200,16 +223,66 @@ if (detailPhoto) {
     if (event.key === "ArrowLeft") changeGalleryImage(activeGalleryIndex - 1);
     if (event.key === "ArrowRight") changeGalleryImage(activeGalleryIndex + 1);
   });
-  let touchStartX = 0;
-  lightbox.addEventListener("touchstart", event => {
-    touchStartX = event.changedTouches[0].screenX;
-  }, { passive: true });
-  lightbox.addEventListener("touchend", event => {
-    const delta = event.changedTouches[0].screenX - touchStartX;
-    if (Math.abs(delta) > 45 && galleryImages.length > 1) {
-      changeGalleryImage(activeGalleryIndex + (delta < 0 ? 1 : -1));
+  let detailTouch = null;
+  let suppressPhotoClick = false;
+  detailPhoto.addEventListener("touchstart", event => {
+    if (event.touches.length === 1) {
+      detailTouch = {x: event.touches[0].clientX, y: event.touches[0].clientY, horizontal: false};
     }
   }, { passive: true });
+  detailPhoto.addEventListener("touchmove", event => {
+    if (!detailTouch || event.touches.length !== 1) return;
+    const deltaX = event.touches[0].clientX - detailTouch.x;
+    const deltaY = event.touches[0].clientY - detailTouch.y;
+    if (Math.abs(deltaX) > 10 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      detailTouch.horizontal = true;
+      event.preventDefault();
+    }
+  }, { passive: false });
+  detailPhoto.addEventListener("touchend", event => {
+    if (!detailTouch) return;
+    const deltaX = event.changedTouches[0].clientX - detailTouch.x;
+    if (detailTouch.horizontal && Math.abs(deltaX) > 45 && galleryImages.length > 1) {
+      changeGalleryImage(activeGalleryIndex + (deltaX < 0 ? 1 : -1));
+      suppressPhotoClick = true;
+      window.setTimeout(() => { suppressPhotoClick = false; }, 350);
+    }
+    detailTouch = null;
+  }, { passive: true });
+  detailPhoto.addEventListener("touchcancel", () => { detailTouch = null; }, { passive: true });
+  let lightboxTouch = null;
+  let suppressLightboxClick = false;
+  lightbox.addEventListener("touchstart", event => {
+    if (event.touches.length === 1) {
+      lightboxTouch = {x: event.touches[0].clientX, y: event.touches[0].clientY, horizontal: false};
+    }
+  }, { passive: true });
+  lightbox.addEventListener("touchmove", event => {
+    if (!lightboxTouch || event.touches.length !== 1) return;
+    const deltaX = event.touches[0].clientX - lightboxTouch.x;
+    const deltaY = event.touches[0].clientY - lightboxTouch.y;
+    if (Math.abs(deltaX) > 10 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      lightboxTouch.horizontal = true;
+      event.preventDefault();
+    }
+  }, { passive: false });
+  lightbox.addEventListener("touchend", event => {
+    if (!lightboxTouch) return;
+    const deltaX = event.changedTouches[0].clientX - lightboxTouch.x;
+    if (lightboxTouch.horizontal && Math.abs(deltaX) > 45 && galleryImages.length > 1) {
+      changeGalleryImage(activeGalleryIndex + (deltaX < 0 ? 1 : -1));
+      suppressLightboxClick = true;
+      window.setTimeout(() => { suppressLightboxClick = false; }, 350);
+    }
+    lightboxTouch = null;
+  }, { passive: true });
+  lightbox.addEventListener("touchcancel", () => { lightboxTouch = null; }, { passive: true });
+  detailPhoto.addEventListener("click", event => {
+    if (suppressPhotoClick) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }, true);
   renderGallery();
 
   const sizeSelect = document.querySelector("#sizeChoice");
@@ -236,10 +309,19 @@ if (detailPhoto) {
 }
 function observeReveals() {
   const items = document.querySelectorAll(".reveal:not(.revealed)");
-  if (!("IntersectionObserver" in window)) { items.forEach(item => item.classList.add("revealed")); return; }
-  const observer = new IntersectionObserver(entries => entries.forEach(entry => {
-    if (entry.isIntersecting) { entry.target.classList.add("revealed"); observer.unobserve(entry.target); }
-  }), {threshold: 0.08});
-  items.forEach(item => observer.observe(item));
+  if (!items.length) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+    items.forEach(item => item.classList.add("revealed"));
+    return;
+  }
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("revealed");
+        revealObserver.unobserve(entry.target);
+      }
+    }), {threshold: 0.08, rootMargin: "0px 0px -4%"});
+  }
+  items.forEach(item => revealObserver.observe(item));
 }
 observeReveals();
