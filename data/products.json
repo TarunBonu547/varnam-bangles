@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-18T16:56:12.184Z",
+  "updatedAt": "2026-10-18T16:56:14.147Z",
   "products": [
     {
       "id": "maroon-stone",
@@ -214,6 +214,29 @@
       "meeshoUrl": null,
       "createdAt": "2026-10-18T16:56:12.184Z",
       "updatedAt": "2026-10-18T16:56:12.184Z"
+    },
+    {
+      "id": "valid-explicit-id",
+      "slug": "valid-explicit-id",
+      "name": "Valid Explicit ID Product",
+      "description": "A product with explicit ID",
+      "price": 999,
+      "originalPrice": null,
+      "images": [],
+      "image": "",
+      "category": "Bridal",
+      "material": "",
+      "sizes": [],
+      "colour": "",
+      "colours": [],
+      "stockStatus": "in_stock",
+      "available": true,
+      "published": true,
+      "featured": false,
+      "bestseller": false,
+      "meeshoUrl": null,
+      "createdAt": "2026-10-18T16:56:14.147Z",
+      "updatedAt": "2026-10-18T16:56:14.147Z"
     }
   ]
 }
