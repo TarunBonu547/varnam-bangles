@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-18T16:56:14.147Z",
+  "updatedAt": "2026-10-18T16:56:15.901Z",
   "products": [
     {
       "id": "maroon-stone",
@@ -237,6 +237,29 @@
       "meeshoUrl": null,
       "createdAt": "2026-10-18T16:56:14.147Z",
       "updatedAt": "2026-10-18T16:56:14.147Z"
+    },
+    {
+      "id": "another-valid-id",
+      "slug": "another-valid-product",
+      "name": "Another Valid Product",
+      "description": "Another valid product",
+      "price": 1499,
+      "originalPrice": null,
+      "images": [],
+      "image": "",
+      "category": "Glass",
+      "material": "",
+      "sizes": [],
+      "colour": "",
+      "colours": [],
+      "stockStatus": "in_stock",
+      "available": true,
+      "published": true,
+      "featured": false,
+      "bestseller": false,
+      "meeshoUrl": null,
+      "createdAt": "2026-10-18T16:56:15.901Z",
+      "updatedAt": "2026-10-18T16:56:15.901Z"
     }
   ]
 }
