@@ -1,0 +1,115 @@
+<%- include('../../partials/head.ejs') %>
+<div class="admin-topbar">
+  <div>
+    <p class="admin-kicker"><%= product ? "Edit" : "Add" %> product</p>
+    <h1 class="admin-page-title"><%= product ? "Edit product" : "Add a product" %></h1>
+  </div>
+  <a href="/admin/products" class="btn btn-outline">Back to catalogue</a>
+</div>
+
+<% if (errors && errors.length) { %>
+<p class="admin-message error"><%= errors[0].message %></p>
+<% } %>
+
+<form id="productForm" novalidate>
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <input type="hidden" name="id" value="<%= values.id || '' %>">
+
+  <label>
+    <span>Product ID <strong>*</strong></span>
+    <input name="id" type="text" placeholder="e.g. maroon-stone" <%= product ? 'readonly' : '' %> value="<%= values.id || '' %>" <%= product ? 'readonly' : '' %>>
+    <% if (errors) { var eid = errors.find(function(e){ return e.field==="id"; }); if(eid){ %><p class="field-error"><%- eid.message %></p><input class="error"><% } } %>
+    <small>Lowercase letters, numbers and hyphens only. Cannot be changed after creation.</small>
+  </label>
+
+  <label>
+    <span>Product name <strong>*</strong></span>
+    <input name="name" type="text" placeholder="Maroon Stone Bangles" value="<%= values.name || '' %>">
+    <% if (errors) { var ename = errors.find(function(e){ return e.field==="name"; }); if(ename){ %><p class="field-error"><%- ename.message %></p><input class="error"><% } } %>
+  </label>
+
+  <label>
+    <span>Slug</span>
+    <input name="slug" type="text" placeholder="maroon-stone-bangles" value="<%= values.slug || '' %>">
+    <small>Used in the product URL. Leave blank to derive from the ID.</small>
+  </label>
+
+  <label>
+    <span>Description <strong>*</strong></span>
+    <textarea name="description" rows="4" placeholder="Describe the bangle..."><%= values.description || '' %></textarea>
+    <% if (errors) { var edesc = errors.find(function(e){ return e.field==="description"; }); if(edesc){ %><p class="field-error"><%- edesc.message %></p><% } } %>
+  </label>
+
+  <div class="admin-two-col">
+    <label>
+      <span>Price (INR) <strong>*</strong></span>
+      <input name="price" type="number" min="0" step="1" value="<%= values.price || '' %>">
+      <% if (errors) { var eprice = errors.find(function(e){ return e.field==="price"; }); if(eprice){ %><p class="field-error"><%- eprice.message %></p><input class="error"><% } } %>
+    </label>
+    <label>
+      <span>Original price (₹)</span>
+      <input name="originalPrice" type="number" min="0" step="1" value="<%= values.originalPrice || '' %>">
+      <small>Optional strikethrough price shown on the storefront.</small>
+    </label>
+  </div>
+
+  <div class="admin-two-col">
+    <label>
+      <span>Category <strong>*</strong></span>
+      <select name="category">
+        <% categories.forEach(function(c){ %><option value="<%= c.key %>" <%= (values.category===c.key)?"selected":"" %>><%= c.label %></option><% }) %>
+      </select>
+      <% if (errors) { var ec = errors.find(function(e){ return e.field==="category"; }); if(ec){ %><p class="field-error"><%- ec.message %></p><% } } %>
+    </label>
+    <label>
+      <span>Material</span>
+      <input name="material" type="text" placeholder="e.g. Glass with gold-tone details" value="<%= values.material || '' %>">
+    </label>
+  </div>
+
+  <label>
+    <span>Colour</span>
+    <input name="colour" type="text" placeholder="e.g. Maroon & Gold" value="<%= values.colour || '' %>">
+    <small>Primary colour shown on the product detail page.</small>
+  </label>
+
+  <label>
+    <span>Available colours</span>
+    <input name="colours" type="text" placeholder="Maroon & Gold, Gold" value="<%= (values.colours && values.colours.join) ? values.colours.join(", ") : '' %>">
+    <small>Comma-separated list used for colour filtering.</small>
+  </label>
+
+  <label>
+    <span>Available sizes</span>
+    <input name="sizes" type="text" placeholder="2.2, 2.4, 2.6, 2.8" value="<%= (values.sizes && values.sizes.join) ? values.sizes.join(", ") : '' %>">
+    <small>Comma-separated bangle sizes.</small>
+  </label>
+
+  <label>
+    <span>Product images</span>
+    <input name="images" type="text" class="image-urls-input" placeholder="https://...image1.jpg, https://...image2.jpg" value="<%= (values.images && values.images.join) ? values.images.join(", ") : '' %>">
+    <small>Comma-separated image URLs. First image is the cover photo.</small>
+  </label>
+
+  <label>
+    <span>Meesho product URL</span>
+    <input name="meeshoUrl" type="url" placeholder="https://www.meesho.com/..." value="<%= values.meeshoUrl || '' %>">
+    <small>Optional purchase link.</small>
+  </label>
+
+  <div class="admin-checks">
+    <label><input type="checkbox" name="featured" value="1" <%= values.featured ? 'checked' : '' %>> Featured product</label>
+    <label><input type="checkbox" name="bestseller" value="1" <%= values.bestseller ? 'checked' : '' %>> Bestseller</label>
+    <label><input type="checkbox" name="available" value="1" <%= values.available !== false ? 'checked' : '' %>> Available to visitors</label>
+    <label><input type="checkbox" name="published" value="1" <%= values.published !== false ? 'checked' : '' %>> Published on storefront</label>
+  </div>
+
+  <div class="actions form-actions">
+    <button class="btn btn-solid" type="submit"><%= product ? "Save changes" : "Save product" %> ↗</button>
+    <button type="button" class="btn btn-outline" id="cancelFormBtn">Cancel</button>
+  </div>
+</form>
+
+  <script src="/js/admin-product-form.js" defer></script>
+
+<%- include('../../partials/footer.ejs') %>

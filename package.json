@@ -1,0 +1,32 @@
+{
+  "name": "varnam-bangles",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Varnam Bangles storefront with GitHub-backed admin panel",
+  "private": true,
+  "scripts": {
+    "start": "node --import dotenv/config server/index.js",
+    "dev": "node --import dotenv/config server/index.js",
+    "lint": "npx eslint server test",
+    "test": "node --import dotenv/config --test",
+    "postinstall": "echo \"Copy .env.example to .env and fill in your values before starting.\""
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^18.0.8",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.18.1",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.15.0",
+    "globals": "^17.13.0"
+  }
+}

@@ -1,0 +1,49 @@
+<%- include('../partials/head.ejs') %>
+<div class="admin-topbar">
+  <div>
+    <p class="admin-kicker">Categories</p>
+    <h1 class="admin-page-title">Product categories</h1>
+  </div>
+</div>
+
+<form id="categoryForm" class="category-form" novalidate>
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <input name="key" type="text" placeholder="Category key (e.g. Bridal)" class="category-input" required>
+  <input name="label" type="text" placeholder="Label (e.g. Bridal collection)" class="category-input" required>
+  <button class="btn btn-solid" type="submit">Add category</button>
+</form>
+
+<% if (categories && categories.length) { %>
+<table class="table">
+  <thead><tr><th class="cat-col-key">Key</th><th>Label</th><th class="col-150">Actions</th></tr></thead>
+  <tbody>
+    <% categories.forEach(function(c){ %>
+      <% if(c.key==="All") return; %>
+    <tr id="cat-row-<%= c.key %>">
+      <td><code><%= c.key %></code></td>
+      <td><%= c.label %></td>
+      <td class="actions">
+        <button class="btn btn-outline btn-sm" data-edit-key="<%= c.key %>" data-edit-label="<%= c.label %>">Edit</button>
+        <button class="btn btn-danger btn-sm" data-delete="<%= c.key %>">Delete</button>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
+<% } else { %>
+<p class="empty">No categories yet.</p>
+<% } %>
+
+<div id="editWrap" class="edit-wrap">
+  <form id="editCatForm" class="edit-form" novalidate>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <input name="key" type="text" readonly class="edit-key-input">
+    <input name="label" type="text" placeholder="New label" class="category-input" required>
+    <button class="btn btn-solid btn-sm" type="submit">Save</button>
+    <button type="button" class="btn btn-outline btn-sm" id="cancelEditBtn">Cancel</button>
+  </form>
+</div>
+
+  <script src="/js/admin-categories.js" defer></script>
+
+<%- include('../partials/footer.ejs') %>

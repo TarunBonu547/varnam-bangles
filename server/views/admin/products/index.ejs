@@ -1,0 +1,56 @@
+<%- include('../../partials/head.ejs') %>
+<div class="admin-topbar">
+  <div>
+    <p class="admin-kicker">Product management</p>
+    <h1 class="admin-page-title">Catalogue</h1>
+  </div>
+  <a href="/admin/products/new" class="btn btn-solid">Add product ↗</a>
+</div>
+
+<form class="filter-form" action="/admin/products" method="GET">
+  <label><span>Search</span><input name="q" value="<%= filters.q %>" placeholder="Product name or ID"></label>
+  <label><span>Category</span><select name="category"><option value=""><%= filters.category ? filters.category : "All" %></option><% categories.forEach(function(c){ %><option value="<%= c.key %>" <%= (filters.category===c.key)?"selected":"" %>><%= c.label %></option><% }) %></select></label>
+  <label><span>Stock</span><select name="stock"><option value=""><%= filters.stock ? filters.stock : "All" %></option><option value="in_stock" <%= (filters.stock==="in_stock")?"selected":"" %>">In stock</option><option value="out_of_stock" <%= (filters.stock==="out_of_stock")?"selected":"" %>">Out of stock</option></select></label>
+  <label><span>Featured</span><select name="featured"><option value=""><%= filters.featured ? filters.featured : "All" %></option><option value="true" <%= (filters.featured==="true")?"selected":"" %>">Yes</option><option value="false" <%= (filters.featured==="false")?"selected":"" %>">No</option></select></label>
+  <label><span>Sort</span><select name="sort"><option value="newest" <%= (filters.sort==="newest"||!filters.sort)?"selected":"" %>">Newest first</option><option value="name" <%= (filters.sort==="name")?"selected":"" %>">Name A→Z</option><option value="price-low" <%= (filters.sort==="price-low")?"selected":"" %>">Price low→high</option><option value="price-high" <%= (filters.sort==="price-high")?"selected":"" %>">Price high→low</option></select></label>
+</form>
+
+<% if (products && products.length) { %>
+<table class="table">
+  <thead><tr>
+    <th class="col-44"></th>
+    <th>Product</th>
+    <th class="col-130">Category</th>
+    <th class="col-110">Price</th>
+    <th class="col-110">Stock</th>
+    <th class="col-100">Featured</th>
+    <th class="col-110">Bestseller</th>
+    <th class="col-150">Updated</th>
+    <th class="col-170">Actions</th>
+  </tr></thead>
+  <tbody>
+    <% products.forEach(function(p){ %>
+    <tr id="product-row-<%= p.id %>">
+      <td><strong><%= p.id %></strong></td>
+        <td><a href="/admin/products/edit/<%= p.id %>" class="product-name-link"><%= p.name %></a><div class="product-slug"><%= p.slug %></div></td>
+      <td><%= p.category %></td>
+      <td>₹<%= p.price %><%= p.originalPrice ? " <span class='original-price'>₹"+p.originalPrice+"</span>" : "" %></td>
+      <td><span class="badge <%= p.stockStatus==='in_stock'?'badge-ok':'badge-warn' %>"><%= p.stockStatus==='in_stock'?'In stock':'Out of stock' %></span></td>
+      <td><span class="badge <%= p.featured?'badge-gold':'' %>"><%= p.featured?'Yes':'No' %></span></td>
+      <td><span class="badge <%= p.bestseller?'badge-gold':'' %>"><%= p.bestseller?'Yes':'No' %></span></td>
+      <td class="date-cell"><%= new Date(p.updatedAt||p.createdAt).toLocaleDateString() %></td>
+      <td class="actions">
+        <a href="/admin/products/edit/<%= p.id %>" class="btn btn-outline btn-sm">Edit</a>
+        <button class="btn btn-danger btn-sm" data-delete="<%= p.id %>">Delete</button>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
+<% } else { %>
+<p class="empty">No products found. <a href="/admin/products/new">Add your first product.</a></p>
+<% } %>
+
+  <script src="/js/admin-products.js" defer></script>
+
+<%- include('../../partials/footer.ejs') %>

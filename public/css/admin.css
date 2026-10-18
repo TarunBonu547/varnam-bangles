@@ -1,0 +1,135 @@
+*{box-sizing:border-box}
+:root{
+  --cream:#f8f3eb;
+  --cream-deep:#efe2d5;
+  --wine:#70232b;
+  --wine-dark:#4c171d;
+  --gold:#b98543;
+  --ink:#30221f;
+  --muted:#7d6a61;
+  --line:#e6d8ca;
+}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:"DM Sans",sans-serif}
+a{color:inherit;text-decoration:none}
+
+/* Shared components */
+label{display:block;font-size:11px;color:var(--muted);letter-spacing:.03em;margin:0 0 6px;font-weight:600}
+input,textarea,select{width:100%;border:1px solid #d8c4b3;border-radius:2px;background:rgba(255,255,255,.45);padding:11px 13px;color:var(--ink);font:13px "DM Sans",sans-serif}
+input:focus,textarea:focus,select:focus{border-color:var(--gold);outline:0;box-shadow:0 0 0 2px rgba(185,133,67,.12)}
+.admin-message{padding:12px 16px;border-left:3px solid var(--gold);background:#f0e3d7;color:var(--ink);font-size:12px;margin:0 0 20px}
+.admin-message.error{border-color:var(--wine);color:var(--wine-dark);background:#f3dedb}
+.admin-message.success{border-color:#657246;background:#e6ebdc}
+.admin-message.info{border-color:var(--gold);background:#f4f1ea}
+.field-error{color:var(--wine-dark);font-size:11px;margin-top:6px}
+input.error,select.error,textarea.error{border-color:var(--wine)}
+.admin-kicker{color:var(--gold);font-size:9px;letter-spacing:2.5px;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:3px;padding:11px 18px;font:11px "DM Sans",sans-serif;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+.btn-solid{background:var(--wine);color:#fff}
+.btn-solid:hover{background:var(--wine-dark)}
+.btn-outline{background:transparent;border:1px solid var(--wine);color:var(--wine)}
+.btn-outline:hover{background:#efe0d6}
+.btn-sm{padding:7px 12px;font-size:10px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* Login page */
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.login-card{background:#fff;border:1px solid #e6d8ca;border-radius:4px;padding:40px 32px;width:min(420px,92%);box-shadow:0 20px 40px rgba(65,35,27,.06)}
+.brand{font-family:"Playfair Display",serif;color:var(--wine-dark);font-size:24px;letter-spacing:4px;display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.brand small{font-size:9px;letter-spacing:5px;color:#94705a}
+h2{font-family:"Playfair Display",serif;font-size:26px;color:var(--wine-dark);margin:0 0 16px;line-height:1.25}
+.note{margin-top:22px;font-size:11px;color:var(--muted);text-align:center}
+.form+ .form{margin-top:18px}
+
+/* Admin shell */
+.admin-shell{display:grid;grid-template-columns:250px 1fr;min-height:100vh;background:var(--cream)}
+.admin-sidebar{position:sticky;top:0;height:100svh;padding:26px 0 40px;border-right:1px solid var(--line);background:#fff}
+.admin-sidebar .brand{padding:0 20px 24px;font-family:"Playfair Display",serif;color:var(--wine-dark);font-size:20px;letter-spacing:4px;border-bottom:1px solid var(--line);margin-bottom:26px}
+.admin-sidebar nav{padding:0 14px}
+.admin-sidebar nav a{display:block;padding:10px 16px;color:var(--muted);font-size:12px;letter-spacing:.05em;border-left:3px solid transparent;border-radius:0 6px 6px 0;margin:2px 0}
+.admin-sidebar nav a.active{color:var(--wine);background:#f4eae0;border-left-color:var(--gold)}
+.admin-sidebar nav a:hover{background:#faf6f0}
+.admin-body{padding:28px clamp(22px,6vw,92px);overflow-y:auto}
+.admin-header{position:sticky;top:0;z-index:25;background:rgba(248,243,235,.97);border-bottom:1px solid var(--line)}
+.admin-topbar-inner{display:flex;align-items:center;justify-content:space-between;padding:0 clamp(22px,6vw,92px);height:70px;gap:16px}
+.admin-brand-link{color:var(--wine-dark);font-family:"Playfair Display",serif;font-size:20px;letter-spacing:4px}
+.admin-view-site{margin-left:auto}
+.admin-email{color:var(--wine)}
+.admin-signed-in{padding:24px 16px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}
+.admin-logout-form{margin-top:10px}
+.admin-logout-btn{width:100%}
+.admin-brand-small{font-size:8px;letter-spacing:5px}
+
+/* Dashboard */
+.admin-topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px;flex-wrap:wrap}
+.stat-badge{display:inline-block;padding:4px 8px;border-radius:100px;font-size:8px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.stat-card{background:#fff;border:1px solid var(--line);border-radius:4px;padding:20px;height:100%}
+.stat-card .value{font-family:"Playfair Display",serif;font-size:30px;color:var(--wine-dark);margin:6px 0 2px;line-height:1.2}
+.stat-card .label{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.stat-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:22px 0}
+.admin-page-title{font-family:"Playfair Display",serif;font-size:clamp(26px,3vw,34px);color:var(--wine-dark);margin:0}
+.admin-recent-wrapper{display:grid;grid-template-columns:1fr 320px;gap:26px}
+.admin-quick-aside{background:#fff;border:1px solid var(--line);border-radius:4px;padding:18px}
+.admin-note{margin-top:16px;font-size:11px;color:var(--muted)}
+.quick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:10px}
+.quick .btn{width:100%;justify-content:center}
+
+/* Tables */
+.table{width:100%;border-collapse:collapse;font-size:13px}
+.table th{text-align:left;padding:10px 12px;color:var(--muted);font-size:10px;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--line)}
+.table td{padding:12px 8px;border-bottom:1px solid #f0e8dc;vertical-align:middle}
+.table tr:hover td{background:#faf6f0}
+.col-44{width:44px}
+.col-130{width:130px}
+.col-110{width:110px}
+.col-100{width:100px}
+.col-150{width:150px}
+.col-170{width:170px}
+.product-name-link{color:var(--wine);font-weight:600}
+.product-slug{font-size:10px;color:var(--muted);margin-top:2px}
+.original-price{font-size:10px;color:var(--muted);text-decoration:line-through}
+.date-cell{font-size:11px;color:var(--muted)}
+.badge{display:inline-block;padding:4px 8px;border-radius:100px;font-size:8px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.badge-ok{background:#e6ebdc;color:#4a5c38}
+.badge-warn{background:#f3dedb;color:var(--wine-dark)}
+.badge-gold{background:#f4e9d6;color:#8a6430}
+
+/* Forms */
+.admin-form{display:grid;gap:20px;max-width:720px}
+.admin-form label{display:grid;gap:7px;color:var(--muted);font-size:11px;letter-spacing:.03em}
+.admin-form small{font-size:10px;color:#937e72}
+.admin-two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.admin-checks{display:flex;flex-wrap:wrap;gap:18px}
+.admin-checks label{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink);cursor:pointer}
+.form-actions{margin-top:10px}
+
+/* Categories */
+.category-form{display:flex;gap:8px;align-items:flex-end;max-width:420px;margin-bottom:22px}
+.category-input{flex:1}
+.cat-col-key{width:40%}
+.edit-wrap{margin-top:16px;background:#faf6f0;border:1px solid var(--line);border-radius:4px;padding:14px 16px;display:none}
+.edit-form{display:flex;gap:8px;align-items:flex-end}
+.edit-key-input{width:150px;flex:0}
+
+/* Filters & lists */
+.filter-form{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;background:#faf6f0;border:1px solid var(--line);border-radius:4px;padding:14px 16px;margin-bottom:18px}
+.filter-form label{font-size:11px;color:var(--muted);letter-spacing:.03em;display:flex;flex-direction:column;gap:4px}
+.recent-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.recent-item{background:#fff;border:1px solid var(--line);border-radius:4px;padding:10px}
+.recent-item .name{font-weight:600;color:var(--ink);font-size:12px}
+.recent-item .meta{font-size:10px;color:var(--muted);margin-top:4px}
+.image-urls{display:flex;gap:8px;align-items:center}
+.image-urls input[type="text"]{flex:1}
+.empty{text-align:center;color:var(--muted);padding:40px}
+
+/* Responsive */
+@media(max-width:900px){
+  .admin-shell{grid-template-columns:1fr}
+  .admin-sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}
+  .stat-row,.recent-grid,.quick{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .admin-two-col{grid-template-columns:1fr}
+  .stat-row,.recent-grid,.quick{grid-template-columns:1fr}
+  .filter-form{flex-direction:column;align-items:stretch}
+}

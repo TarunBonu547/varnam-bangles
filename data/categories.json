@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "updatedAt": "2026-10-18T09:55:00Z",
+  "categories": [
+    { "key": "All", "label": "All bangles" },
+    { "key": "Bridal", "label": "Bridal collection" },
+    { "key": "Glass", "label": "Glass bangles" },
+    { "key": "Metal", "label": "Metal bangles" },
+    { "key": "Daily Wear", "label": "Daily wear" },
+    { "key": "Traditional", "label": "Traditional" },
+    { "key": "Other", "label": "Other" }
+  ]
+}

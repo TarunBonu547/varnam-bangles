@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in | Varnam Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="brand">VARNAM<small> BANGLES</small></div>
+      <p class="admin-kicker">Authorized access</p>
+      <h2>Admin sign in</h2>
+      <% if (locals.flash) { %><p class="admin-message error"><%- locals.flash.message %></p><% } %>
+      <form id="loginForm" novalidate>
+        <div class="form">
+          <label for="loginEmail">Email address</label>
+          <input id="loginEmail" name="email" type="email" autocomplete="username" required>
+        </div>
+        <div class="form">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="btn" type="submit">Sign in</button>
+      </form>
+      <p class="note">Access is restricted to the configured administrator account.</p>
+    </div>
+  </div>
+  <script src="/js/admin-login.js" defer></script>
+</body>
+</html>

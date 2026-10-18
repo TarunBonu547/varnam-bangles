@@ -1,0 +1,10 @@
+<%- include('../partials/head.ejs') %>
+<div class="admin-topbar">
+  <div>
+    <p class="admin-kicker">Error</p>
+    <h1 class="admin-page-title"><%= title %></h1>
+  </div>
+  <a href="/admin" class="btn btn-outline">Back to dashboard</a>
+</div>
+<p class="admin-message error"><%- message %></p>
+<%- include('../partials/footer.ejs') %>

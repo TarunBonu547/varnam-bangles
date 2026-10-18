@@ -1,0 +1,45 @@
+<%- include('../partials/head.ejs') %>
+<div class="admin-topbar">
+  <div>
+    <p class="admin-kicker">Dashboard</p>
+    <h1 class="admin-page-title">Catalogue overview</h1>
+  </div>
+  <a href="/admin/products/new" class="btn btn-solid">Add product ↗</a>
+</div>
+
+<div class="stat-row">
+  <div class="stat-card"><div class="label">Total products</div><div class="value"><%= total %></div></div>
+  <div class="stat-card"><div class="label">Available</div><div class="value"><%= available %></div></div>
+  <div class="stat-card"><div class="label">Out of stock</div><div class="value stat-badge badge-warn"><%= outOfStock %></div></div>
+  <div class="stat-card"><div class="label">Featured</div><div class="value stat-badge badge-gold"><%= featured %></div></div>
+</div>
+
+<div class="admin-recent-wrapper">
+  <div>
+    <p class="admin-kicker">Recently added</p>
+    <div class="recent-grid">
+      <% if (recent && recent.length) { %>
+        <% recent.forEach(function(p){ %>
+          <div class="recent-item">
+            <div class="name"><%= p.name %></div>
+            <div class="meta"><%= p.category %> · ₹<%= p.price %> · <%= p.available !== false ? "Available" : "Out of stock" %></div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <div class="recent-item"><div class="meta">No products yet.</div></div>
+      <% } %>
+    </div>
+  </div>
+  <aside class="admin-quick-aside">
+    <p class="admin-kicker">Quick actions</p>
+    <div class="quick">
+      <a href="/admin/products/new" class="btn btn-solid">Add a product</a>
+      <a href="/admin/products" class="btn btn-outline">Manage products</a>
+      <a href="/admin/categories" class="btn btn-outline">Manage categories</a>
+      <a href="/" class="btn btn-outline">Visit storefront</a>
+    </div>
+    <p class="admin-note">Product data lives in <code>data/products.json</code> on GitHub. Changes are committed to the repository from this server.</p>
+  </aside>
+</div>
+
+<%- include('../partials/footer.ejs') %>

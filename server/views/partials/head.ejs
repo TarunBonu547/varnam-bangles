@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> | Varnam Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="admin-page">
+<header class="site-header admin-header">
+  <div class="admin-topbar-inner">
+    <a class="brand admin-brand-link" href="/admin">VARNAM<small class="admin-brand-small"> ADMIN</small></a>
+    <a href="/" class="btn btn-outline btn-sm admin-view-site">View website ↗</a>
+  </div>
+</header>
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <div class="brand">VARNAM<small class="admin-brand-small"> ADMIN</small></div>
+    <nav>
+      <a class="<%= (locals.active==='dashboard')?'active':'' %>" href="/admin">Dashboard</a>
+      <a class="<%= (locals.active==='products')?'active':'' %>" href="/admin/products">Products</a>
+      <a class="<%= (locals.active==='categories')?'active':'' %>" href="/admin/categories">Categories</a>
+    </nav>
+    <div class="admin-signed-in">
+      Signed in as <strong class="admin-email"><%= locals.adminEmail %></strong><br>
+      <form action="/admin/logout" method="POST" class="admin-logout-form">
+        <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
+        <button class="btn btn-outline btn-sm admin-logout-btn" type="submit">Sign out</button>
+      </form>
+    </div>
+  </aside>
+  <div class="admin-body">
+    <% if (locals.flash) { %><p class="admin-message <%= locals.flash.type %>"><%- locals.flash.message %></p><% } %>

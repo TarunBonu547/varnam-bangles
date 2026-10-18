@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Varnam Admin | Catalogue</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="admin-page">
+  <header class="site-header"><a class="brand" href="index.html"><span>VARNAM</span><small>B A N G L E S</small></a><a class="admin-back" href="index.html">View website ↗</a></header>
+  <main class="admin-shell">
+    <div class="admin-heading"><p class="eyebrow">PRIVATE CATALOGUE MANAGEMENT</p><h1>Admin dashboard</h1><p>Update products and photos without editing website files.</p></div>
+    <p id="adminMessage" class="admin-message" hidden role="status"></p>
+    <section id="loginPanel" class="admin-panel login-panel">
+      <p class="admin-kicker">AUTHORIZED ACCESS</p><h2>Sign in to manage products</h2>
+      <form id="loginForm" class="admin-form"><label>Email<input id="loginEmail" type="email" autocomplete="username" required></label><label>Password<input id="loginPassword" type="password" autocomplete="current-password" required></label><button class="button button-solid" type="submit">Sign in <span>↗</span></button></form>
+    </section>
+    <section id="dashboardPanel" hidden>
+      <div class="admin-toolbar"><span>Signed in as <strong id="adminEmail"></strong></span><button id="signOut" class="button button-outline" type="button">Sign out</button></div>
+      <div class="admin-layout">
+        <section class="admin-panel"><div class="admin-panel-heading"><div><p class="admin-kicker">PRODUCT EDITOR</p><h2 id="formTitle">Add a product</h2></div><button id="cancelEdit" class="text-button" type="button" hidden>Cancel edit</button></div>
+          <form id="productForm" class="admin-form">
+            <label>Product ID <input id="productId" required placeholder="e.g. maroon-stone" pattern="[a-z0-9-]+"><small>Lowercase letters, numbers and hyphens only.</small></label>
+            <label>Name <input id="productName" required></label>
+            <div class="admin-two-col"><label>Price in INR <input id="productPrice" type="number" min="0" step="1" required></label><label>Category <select id="productCategory"><option>Bridal</option><option>Glass</option><option>Metal</option><option>Daily Wear</option><option>Traditional</option><option>Other</option></select></label></div>
+            <label>Description <textarea id="productDescription" rows="4" required></textarea></label>
+            <div class="admin-two-col"><label>Colour <input id="productColour"></label><label>Material <input id="productMaterial"></label></div>
+            <label>Available sizes <input id="productSizes" placeholder="2.2, 2.4, 2.6, 2.8"><small>Separate sizes with commas.</small></label>
+            <label>Meesho product URL <input id="productMeesho" type="url" placeholder="https://www.meesho.com/..."></label>
+            <label>Product images <input id="productImages" type="file" accept="image/*" multiple><small>Images are stored in Firebase Storage. Maximum 10 MB each.</small></label>
+            <div id="imagePreview" class="image-preview" aria-live="polite"></div>
+            <div class="admin-checks"><label><input id="productFeatured" type="checkbox"> Featured product</label><label><input id="productAvailable" type="checkbox" checked> Available to visitors</label></div>
+            <button class="button button-solid" type="submit">Save product <span>↗</span></button>
+          </form>
+        </section>
+        <section class="admin-panel catalogue-panel"><div class="admin-panel-heading"><div><p class="admin-kicker">CATALOGUE</p><h2>Manage products</h2></div><button id="importLegacy" class="button button-outline" type="button">Import existing catalogue</button></div><div class="admin-catalogue-tools"><input id="adminSearch" type="search" placeholder="Search products..." aria-label="Search products"><select id="adminFilter" aria-label="Filter products"><option value="">All products</option><option value="available">Available</option><option value="unavailable">Unavailable</option><option value="featured">Featured</option></select></div><div id="adminProductList" class="admin-product-list"></div></section>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
