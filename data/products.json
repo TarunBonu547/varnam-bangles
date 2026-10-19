@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-19T05:49:21.402Z",
+  "updatedAt": "2026-10-19T05:49:48.716Z",
   "products": [
     {
       "id": "maroon-stone",
@@ -300,12 +300,12 @@
       "colours": [],
       "stockStatus": "in_stock",
       "available": true,
-      "published": false,
+      "published": true,
       "featured": false,
       "bestseller": false,
       "meeshoUrl": null,
-      "updatedAt": "2026-10-19T05:49:21.402Z",
-      "createdAt": "2026-10-19T05:49:21.402Z"
+      "updatedAt": "2026-10-19T05:49:48.716Z",
+      "createdAt": "2026-10-19T05:49:48.716Z"
     }
   ]
 }
