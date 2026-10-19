@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-19T05:34:01.536Z",
+  "updatedAt": "2026-10-19T05:35:52.477Z",
   "products": [
     {
       "id": "maroon-stone",
@@ -266,7 +266,7 @@
       "slug": "royal-maroon-bridal-bangles",
       "name": "Royal Maroon Bridal Bangles",
       "description": "Elegant royal maroon bridal bangles designed to complement traditional Indian wedding attire. A beautiful choice for bridal wear, festive occasions, and celebrations.",
-      "price": 344,
+      "price": 5667,
       "originalPrice": 566,
       "images": [],
       "image": "",
@@ -285,8 +285,8 @@
       "featured": false,
       "bestseller": false,
       "meeshoUrl": null,
-      "createdAt": "2026-10-19T05:34:01.536Z",
-      "updatedAt": "2026-10-19T05:34:01.536Z"
+      "updatedAt": "2026-10-19T05:35:52.477Z",
+      "createdAt": "2026-10-19T05:35:52.477Z"
     }
   ]
 }
