@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-19T05:38:37.465Z",
+  "updatedAt": "2026-10-19T05:45:15.281Z",
   "products": [
     {
       "id": "maroon-stone",
@@ -260,6 +260,29 @@
       "meeshoUrl": null,
       "updatedAt": "2026-10-19T05:37:41.307Z",
       "createdAt": "2026-10-19T05:37:41.307Z"
+    },
+    {
+      "id": "pub-test-product",
+      "slug": "pub-test-product",
+      "name": "Published Test Product",
+      "description": "A published product",
+      "price": 100,
+      "originalPrice": null,
+      "images": [],
+      "image": "",
+      "category": "Bridal",
+      "material": "",
+      "sizes": [],
+      "colour": "",
+      "colours": [],
+      "stockStatus": "in_stock",
+      "available": true,
+      "published": true,
+      "featured": false,
+      "bestseller": false,
+      "meeshoUrl": null,
+      "createdAt": "2026-10-19T05:45:15.281Z",
+      "updatedAt": "2026-10-19T05:45:15.281Z"
     }
   ]
 }
