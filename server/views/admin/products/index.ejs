@@ -25,21 +25,23 @@
     <th class="col-110">Stock</th>
     <th class="col-100">Featured</th>
     <th class="col-110">Bestseller</th>
+    <th class="col-100">Published</th>
     <th class="col-150">Updated</th>
     <th class="col-170">Actions</th>
   </tr></thead>
   <tbody>
     <% products.forEach(function(p){ %>
     <tr id="product-row-<%= p.id %>">
-      <td><strong><%= p.id %></strong></td>
-        <td><a href="/admin/products/edit/<%= p.id %>" class="product-name-link"><%= p.name %></a><div class="product-slug"><%= p.slug %></div></td>
-      <td><%= p.category %></td>
-      <td>₹<%= p.price %><%= p.originalPrice ? " <span class='original-price'>₹"+p.originalPrice+"</span>" : "" %></td>
-      <td><span class="badge <%= p.stockStatus==='in_stock'?'badge-ok':'badge-warn' %>"><%= p.stockStatus==='in_stock'?'In stock':'Out of stock' %></span></td>
-      <td><span class="badge <%= p.featured?'badge-gold':'' %>"><%= p.featured?'Yes':'No' %></span></td>
-      <td><span class="badge <%= p.bestseller?'badge-gold':'' %>"><%= p.bestseller?'Yes':'No' %></span></td>
-      <td class="date-cell"><%= new Date(p.updatedAt||p.createdAt).toLocaleDateString() %></td>
-      <td class="actions">
+      <td data-label="ID"><strong><%= p.id %></strong></td>
+        <td data-label="Product"><a href="/admin/products/edit/<%= p.id %>" class="product-name-link"><%= p.name %></a><div class="product-slug"><%= p.slug %></div></td>
+      <td data-label="Category"><%= p.category %></td>
+      <td data-label="Price">₹<%= p.price %><%= p.originalPrice ? " <span class='original-price'>₹"+p.originalPrice+"</span>" : "" %></td>
+      <td data-label="Stock"><span class="badge <%= p.stockStatus==='in_stock'?'badge-ok':'badge-warn' %>"><%= p.stockStatus==='in_stock'?'In stock':'Out of stock' %></span></td>
+      <td data-label="Featured"><span class="badge <%= p.featured?'badge-gold':'' %>"><%= p.featured?'Yes':'No' %></span></td>
+      <td data-label="Bestseller"><span class="badge <%= p.bestseller?'badge-gold':'' %>"><%= p.bestseller?'Yes':'No' %></span></td>
+      <td data-label="Published"><span class="badge <%= p.published!==false?'badge-ok':'badge-warn' %>"><%= p.published!==false?'Published':'Draft' %></span></td>
+      <td data-label="Updated" class="date-cell"><%= new Date(p.updatedAt||p.createdAt).toLocaleDateString() %></td>
+      <td data-label="Actions" class="actions">
         <a href="/admin/products/edit/<%= p.id %>" class="btn btn-outline btn-sm">Edit</a>
         <button class="btn btn-danger btn-sm" data-delete="<%= p.id %>">Delete</button>
       </td>

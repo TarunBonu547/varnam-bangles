@@ -11,7 +11,7 @@
 <p class="admin-message error"><%= errors[0].message %></p>
 <% } %>
 
-<form id="productForm" novalidate>
+<form id="productForm" action="<%= action %>" method="<%= method %>" novalidate>
   <input type="hidden" name="_csrf" value="<%= csrfToken %>">
   <input type="hidden" name="id" value="<%= values.id || '' %>">
 
@@ -90,6 +90,16 @@
     <input name="images" type="text" class="image-urls-input" placeholder="https://...image1.jpg, https://...image2.jpg" value="<%= (values.images && values.images.join) ? values.images.join(", ") : '' %>">
     <small>Comma-separated image URLs. First image is the cover photo.</small>
   </label>
+
+  <div class="image-upload">
+    <label>
+      <span>Upload images <strong>*</strong></span>
+      <input type="file" id="imageUpload" accept="image/jpeg,image/png,image/webp" multiple>
+      <small>Select one or more images (JPEG, PNG, WebP, max 1 MB each). Previews appear below.</small>
+    </label>
+    <div class="image-previews" id="imagePreviews"></div>
+    <input type="hidden" name="uploadedImages" id="uploadedImages" value="">
+  </div>
 
   <label>
     <span>Meesho product URL</span>

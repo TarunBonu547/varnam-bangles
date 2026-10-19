@@ -43,7 +43,7 @@ app.use((req, res, next) => {
   res.locals.flash = req.session.flash || null;
   res.locals.adminEmail = (req.session && req.session.admin) ? req.session.admin.email : null;
   res.locals.csrfToken = req.session.csrfToken || null;
-  res.locals.cspNonce = res.locals.cspNonce || '';
+  res.locals.cspNonce = res.locals.cspNonce || res.locals['csp-nonce'] || '';
   if (req.session.flash) {delete req.session.flash;}
   next();
 });
@@ -153,7 +153,7 @@ app.get('/admin', requireAuthPage, async (req, res) => {
 app.get('/admin/products', requireAuthPage, async (req, res) => {
   const { products = [] } = await (await import('./store.js')).loadProducts();
   const { q, category, stock, featured, sort } = req.query;
-  let list = products.filter((p) => p.published !== false); // admin sees all published drafts too
+  let list = products; // admin sees all products including unpublished drafts
   if (q) {
     const term = String(q).trim().toLowerCase();
     list = list.filter(

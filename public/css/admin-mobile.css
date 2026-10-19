@@ -1,0 +1,453 @@
+/* VARNAM BANGLES Admin - Mobile-only styles (max-width: 768px)
+   All rules are scoped to mobile viewports; desktop (769px+) is unaffected. */
+@media (max-width: 768px) {
+  /* ---------- Base layout ---------- */
+  .admin-shell {
+    grid-template-columns: 1fr;
+  }
+  .admin-body {
+    padding: 16px 12px env(safe-area-inset-bottom, 0);
+    overflow-y: auto;
+  }
+  .admin-header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+  }
+  .admin-topbar-inner {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 12px;
+    height: auto;
+    min-height: 56px;
+  }
+  .admin-brand-link {
+    font-size: 18px;
+    letter-spacing: 3px;
+  }
+
+  /* ---------- Mobile navigation (hamburger + sidebar overlay) ---------- */
+  .mobile-menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--wine);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--wine);
+    cursor: pointer;
+    padding: 0;
+    margin-left: auto;
+  }
+  .mobile-menu-toggle svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .mobile-menu-close {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: transparent;
+    color: var(--wine);
+    cursor: pointer;
+    padding: 0;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 40;
+  }
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    z-index: 35;
+    border-right: 1px solid var(--line);
+    background: #fff;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.08);
+    overflow-y: auto;
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+  }
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+  .admin-sidebar .brand {
+    padding: 16px;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .admin-sidebar nav {
+    padding: 16px;
+  }
+  .admin-sidebar nav a {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    margin: 4px 0;
+  }
+  .admin-sidebar nav a.active {
+    background: #f4eae0;
+    border-left-color: var(--gold);
+    color: var(--wine);
+  }
+  .admin-sidebar .admin-signed-in {
+    padding: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .admin-sidebar .admin-logout-btn {
+    width: 100%;
+    padding: 11px 16px;
+    text-align: left;
+    justify-content: flex-start;
+  }
+  .admin-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(48, 34, 31, 0.3);
+    z-index: 34;
+    backdrop-filter: blur(2px);
+  }
+  .admin-overlay.open {
+    display: block;
+  }
+
+  /* Hide desktop-only view-site button spacing on mobile if needed */
+  .admin-view-site {
+    margin-left: 0;
+    order: 3;
+  }
+
+  /* ---------- Dashboard ---------- */
+  .admin-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .admin-topbar .btn-solid {
+    width: 100%;
+    justify-content: center;
+  }
+  .stat-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .stat-card {
+    padding: 16px 14px;
+  }
+  .stat-card .value {
+    font-size: 24px;
+  }
+  .admin-recent-wrapper {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .recent-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .recent-item {
+    padding: 12px 14px;
+  }
+  .admin-quick-aside {
+    padding: 16px;
+  }
+  .quick {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .quick .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 11px 16px;
+  }
+
+  /* ---------- Product cards (table → cards on mobile) ---------- */
+  .filter-form {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+    padding: 12px 14px;
+  }
+  .filter-form label {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .filter-form input,
+  .filter-form select {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  .table {
+    display: block;
+  }
+  .table thead {
+    display: none;
+  }
+  .table tbody {
+    display: block;
+  }
+  .table tr {
+    display: block;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .table tr:hover {
+    background: #faf6f0;
+  }
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid #f0e8dc;
+    font-size: 13px;
+  }
+  .table td:last-child {
+    border-bottom: none;
+  }
+  .table td::before {
+    content: attr(data-label);
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    flex: 0 0 38%;
+  }
+  .table td > * {
+    flex: 1;
+    text-align: right;
+  }
+  .table td strong {
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .table td .actions {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+  }
+  .table td .btn {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 9px 12px;
+    font-size: 12px;
+    min-height: 40px;
+  }
+  .table td .btn-danger {
+    background: #f3dedb;
+    color: var(--wine-dark);
+    border: 1px solid var(--wine);
+  }
+  .table td .btn-danger:hover {
+    background: var(--wine-dark);
+    color: #fff;
+  }
+
+  /* ---------- Product form ---------- */
+  .admin-two-col {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .admin-checks {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .admin-checks label {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+  }
+  .admin-checks input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    flex-shrink: 0;
+  }
+  input, textarea, select {
+    padding: 12px 14px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+  textarea {
+    min-height: 100px;
+  }
+  label {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    position: sticky;
+    bottom: env(safe-area-inset-bottom, 0);
+    background: rgba(248, 243, 235, 0.95);
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0));
+    z-index: 10;
+    backdrop-filter: blur(4px);
+  }
+  .form-actions .btn {
+    width: 100%;
+    min-height: 48px;
+    padding: 13px 20px;
+    font-size: 14px;
+    justify-content: center;
+  }
+
+  /* ---------- Categories ---------- */
+  .category-form {
+    flex-direction: column;
+    gap: 10px;
+    max-width: none;
+  }
+  .category-input {
+    width: 100%;
+  }
+  .category-form .btn {
+    width: 100%;
+    min-height: 44px;
+  }
+  .edit-wrap {
+    padding: 14px;
+  }
+  .edit-form {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .edit-key-input {
+    width: 100%;
+  }
+  .edit-form .btn {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  /* ---------- Login page ---------- */
+  .login-wrap {
+    min-height: auto;
+    padding: 16px;
+  }
+  .login-card {
+    padding: 28px 24px;
+    width: min(92%, 400px);
+    border-radius: 6px;
+  }
+  .brand {
+    font-size: 22px;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-size: 22px;
+    margin: 0 0 12px;
+  }
+  .form + .form {
+    margin-top: 14px;
+  }
+  .btn {
+    min-height: 44px;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  .note {
+    margin-top: 16px;
+    font-size: 12px;
+  }
+
+/* ---------- Messages & empty states ---------- */
+.admin-message {
+  padding: 12px 16px;
+  font-size: 13px;
+  margin: 0 0 16px;
+  border-radius: 4px;
+  border-left: none;
+  border: 1px solid;
+}
+.admin-message.error {
+  border-color: var(--wine);
+  background: #f3dedb;
+  color: var(--wine-dark);
+}
+.admin-message.success {
+  border-color: #657246;
+  background: #e6ebdc;
+  color: #4a5c38;
+}
+.empty {
+  padding: 32px 16px;
+  font-size: 13px;
+}
+
+/* ---------- Image upload on mobile ---------- */
+.image-upload {
+  margin-top: 14px;
+  padding: 14px;
+}
+.image-preview {
+  width: 80px;
+  height: 80px;
+}
+.image-upload input[type="file"] {
+  padding: 10px 12px;
+  font-size: 13px;
+}
+.image-preview .remove {
+  width: 22px;
+  height: 22px;
+  font-size: 13px;
+}
+.image-preview .primary {
+  font-size: 9px;
+  padding: 2px 5px;
+}
+
+  /* ---------- Focus states ---------- */
+  input:focus, textarea:focus, select:focus, button:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+  button:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+
+  /* ---------- Prevent horizontal overflow ---------- */
+  html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  .admin-page {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+}

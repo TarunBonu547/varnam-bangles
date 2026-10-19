@@ -61,21 +61,35 @@ export async function getFileJson(path) {
   return { content, sha: body.sha, path: body.path };
 }
 
-// Create or update a JSON file. Re-fetches the SHA and retries once on a 409
-// conflict to handle concurrent modifications.
+// Create or update a JSON file. If the file already exists, its current SHA is
+// supplied with the update; if it does not exist, sha is omitted (create).
+// A 409 conflict triggers one retry with the latest SHA.
 export async function setFileJson(path, value, message) {
   if (!githubConfigured()) {throw new Error('GitHub is not configured on the server.');}
   const url = `${GITHUB_API}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${repoPath(path)}`;
   const content = Buffer.from(JSON.stringify(value, null, 2) + '\n', 'utf8').toString('base64');
 
-  const attempt = async (sha) =>
-    githubRequest(url, {
+  const attempt = async (sha) => {
+    const body = { message, content, branch: GITHUB_BRANCH };
+    if (sha) { body.sha = sha; }
+    return githubRequest(url, {
       method: 'PUT',
-      body: JSON.stringify({ message, content, sha, branch: GITHUB_BRANCH }),
+      body: JSON.stringify(body),
     });
+  };
+
+  let sha = null;
+  try {
+    // File exists: we must supply its current SHA for the update.
+    const current = await getFileJson(path);
+    sha = current.sha;
+  } catch (err) {
+    // File does not exist: create it without sha.
+    if (err.status !== 404) {throw err;}
+  }
 
   try {
-    return await attempt(null);
+    return await attempt(sha);
   } catch (err) {
     if (err.status !== 409) {throw err;}
     // Concurrent modification: reload current SHA and retry once.
@@ -93,6 +107,35 @@ export async function deleteFileJson(path, message) {
     body: JSON.stringify({ message, sha: current.sha, branch: GITHUB_BRANCH }),
   });
   return body;
+}
+
+// Upload a binary file (e.g. product image) to GitHub. Returns the raw file URL.
+// Content must be a base64-encoded string (without data: prefix).
+export async function uploadFile(path, contentBase64, message) {
+  if (!githubConfigured()) {throw new Error('GitHub is not configured on the server.');}
+  const url = `${GITHUB_API}/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${repoPath(path)}`;
+  const body = { message, content: contentBase64, branch: GITHUB_BRANCH };
+
+  let sha = null;
+  try {
+    const current = await getFileJson(path);
+    sha = current.sha;
+  } catch (err) {
+    if (err.status !== 404) {throw err;}
+  }
+
+  if (sha) { body.sha = sha; }
+
+  try {
+    await githubRequest(url, { method: 'PUT', body: JSON.stringify(body) });
+  } catch (err) {
+    if (err.status !== 409) {throw err;}
+    const current = await getFileJson(path);
+    body.sha = current.sha;
+    await githubRequest(url, { method: 'PUT', body: JSON.stringify(body) });
+  }
+
+  return `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${repoPath(path)}`;
 }
 
 export { GITHUB_OWNER, GITHUB_REPO, GITHUB_BRANCH };

@@ -18,6 +18,7 @@ import {
   verifyPassword,
   getSessionName,
 } from '../auth.js';
+import { uploadFile } from '../github.js';
 
 const router = express.Router();
 
@@ -30,7 +31,7 @@ function handleValidation(req, res, next) {
     return res.status(400).json({
       error: 'validation_failed',
       message: 'Please correct the form errors.',
-      fields: errors.array().map((e) => ({ field: e.param, message: e.msg })),
+      fields: errors.array().map((e) => ({ field: e.path, message: e.msg })),
     });
   }
   return next();
@@ -120,7 +121,7 @@ router.get('/api/categories', async (req, res) => {
 
 const productValidation = [
   body('id').matches(/^[a-z0-9-]+$/).withMessage('Use lowercase letters, numbers and hyphens only.'),
-  body('slug').optional().matches(/^[a-z0-9-]+$/).withMessage('Slug must be lowercase, numbers, hyphens.'),
+  body('slug').optional({ checkFalsy: true }).matches(/^[a-z0-9-]+$/).withMessage('Slug must be lowercase, numbers, hyphens.'),
   body('name').notEmpty().withMessage('Name is required.').trim().escape(),
   body('description').notEmpty().withMessage('Description is required.'),
   body('price').isNumeric({ min: 0 }).withMessage('Price must be a number zero or greater.'),
@@ -129,9 +130,48 @@ const productValidation = [
   body('stockStatus').optional().isIn(['in_stock', 'out_of_stock']),
   body('available').optional().isBoolean(),
   body('published').optional().isBoolean(),
-  body('featured').optional().isBoolean(),
-  body('bestseller').optional().isBoolean(),
+body('featured').optional().isBoolean(),
+body('bestseller').optional().isBoolean(),
 ];
+
+// Image upload validation
+const MAX_IMAGE_BYTES = 1024 * 1024; // 1 MB
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+
+const uploadValidation = [
+  body('productId').matches(/^[a-z0-9-]+$/).withMessage('Product ID is required.'),
+  body('files').isArray({ min: 1 }).withMessage('At least one image is required.'),
+  body('files.*.name').notEmpty().withMessage('Image filename is required.'),
+  body('files.*.type').custom((type) => ALLOWED_IMAGE_TYPES.includes(type)).withMessage('Only JPEG, PNG and WebP images are allowed.'),
+  body('files.*.size').isNumeric({ min: 1, max: MAX_IMAGE_BYTES }).withMessage('Image must be between 1 byte and 1 MB.'),
+  body('files.*.data').notEmpty().withMessage('Image data is required.'),
+];
+
+router.post(
+  '/api/upload',
+  requireAuth,
+  csrfGuard,
+  writeRateLimit,
+  uploadValidation,
+  handleValidation,
+  async (req, res) => {
+    try {
+      const { productId, files } = req.body;
+      const uploaded = [];
+      for (const file of files) {
+        const ext = file.name.split('.').pop().toLowerCase();
+        const safeName = file.name.replace(/[^a-z0-9.-]/gi, '_').toLowerCase();
+        const path = `data/images/${productId}/${Date.now()}-${safeName}`;
+        const message = `Add product image ${safeName} for ${productId} via Varnam admin`;
+        const fileUrl = await uploadFile(path, file.data, message);
+        uploaded.push({ name: file.name, url: fileUrl, path });
+      }
+      res.status(201).json({ ok: true, urls: uploaded.map((u) => u.url), files: uploaded });
+    } catch (err) {
+      res.status(502).json({ error: 'upload_failed', message: err.message || 'Image upload failed.' });
+    }
+  }
+);
 
 router.post(
   '/api/products',

@@ -1,4 +1,7 @@
 (function(){
+  var MAX_IMAGE_BYTES = 1024 * 1024;
+  var ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
   function cookie(name){
     const m = document.cookie.match(new RegExp("(?:^|; )"+name+"=([^;]*)"));
     return m ? decodeURIComponent(m[1]) : "";
@@ -9,14 +12,143 @@
     if(el.tagName==="SELECT") return el.value?[el.value]:[];
     return el.value.split(",").map(function(s){ return s.trim(); }).filter(Boolean);
   }
+  function generateIdFromName(name){
+    return String(name || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
+
+  // ----- Image upload -----
+  var uploadInput = document.getElementById("imageUpload");
+  var previewsBox = document.getElementById("imagePreviews");
+  var pending = []; // { file, dataUrl }
+
+  function renderPreviews(){
+    if(!previewsBox) return;
+    previewsBox.innerHTML = "";
+    pending.forEach(function(item, index){
+      var wrap = document.createElement("div");
+      wrap.className = "image-preview";
+
+      var img = document.createElement("img");
+      img.src = item.dataUrl;
+      img.alt = item.file.name;
+      wrap.appendChild(img);
+
+      var remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "remove";
+      remove.setAttribute("aria-label", "Remove " + item.file.name);
+      remove.textContent = "×";
+      remove.addEventListener("click", function(){
+        pending.splice(index, 1);
+        renderPreviews();
+      });
+      wrap.appendChild(remove);
+
+      var tag = document.createElement("span");
+      tag.className = "primary" + (index === 0 ? " active" : "");
+      tag.textContent = index === 0 ? "Cover" : "Make cover";
+      if(index !== 0){
+        tag.style.cursor = "pointer";
+        tag.addEventListener("click", function(){
+          var moved = pending.splice(index, 1)[0];
+          pending.unshift(moved);
+          renderPreviews();
+        });
+      }
+      wrap.appendChild(tag);
+
+      previewsBox.appendChild(wrap);
+    });
+  }
+
+  if(uploadInput){
+    uploadInput.addEventListener("change", function(){
+      var files = Array.prototype.slice.call(uploadInput.files || []);
+      var rejected = 0;
+      files.forEach(function(file){
+        if(ALLOWED_TYPES.indexOf(file.type) === -1){
+          rejected++;
+          return;
+        }
+        if(file.size > MAX_IMAGE_BYTES){
+          rejected++;
+          return;
+        }
+        var reader = new FileReader();
+        reader.onload = function(e){
+          pending.push({ file: file, dataUrl: e.target.result });
+          renderPreviews();
+        };
+        reader.onerror = function(){
+          rejected++;
+        };
+        reader.readAsDataURL(file);
+      });
+      uploadInput.value = "";
+      if(rejected > 0){
+        showToast(rejected + " file(s) skipped. Use JPEG, PNG or WebP under 1 MB.");
+      }
+    });
+  }
+
+  // Upload pending images to the server and return their public URLs.
+  async function uploadPendingImages(productId){
+    if(!pending.length) return [];
+    var res = await fetch("/api/upload", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-XSRF-TOKEN": cookie("XSRF-TOKEN") },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        productId: productId,
+        files: pending.map(function(u){
+          return {
+            name: u.file.name,
+            type: u.file.type,
+            size: u.file.size,
+            data: String(u.dataUrl).split(",")[1] || ""
+          };
+        })
+      })
+    });
+    var data = await res.json().catch(function(){ return {}; });
+    if(!res.ok){
+      var err = new Error(data.message || "Image upload failed.");
+      err.status = res.status;
+      throw err;
+    }
+    return data.urls || [];
+  }
+
   document.getElementById("productForm").addEventListener("submit", async function(e){
     e.preventDefault();
     var form = e.target;
     var fd = new FormData(form);
+    var id = fd.get("id") || "";
+    if (!id) { id = generateIdFromName(fd.get("name")); }
+
+    var images = listValue("images");
+    var btn = form.querySelector('button[type="submit"]');
+    var orig = btn.textContent;
+
+    if(pending.length){
+      btn.textContent = "Uploading images…"; btn.disabled = true;
+      try{
+        var uploaded = await uploadPendingImages(id);
+        images = images.concat(uploaded);
+      }catch(err){
+        showToast(err.message || "Image upload failed. The product was not saved.");
+        btn.textContent = orig; btn.disabled = false;
+        return;
+      }
+    }
+
     var body = {
-      id: fd.get("id"),
+      id: id,
       name: fd.get("name"),
-      slug: fd.get("slug"),
+      slug: fd.get("slug") || undefined,
       description: fd.get("description"),
       price: fd.get("price"),
       originalPrice: fd.get("originalPrice") || null,
@@ -29,14 +161,12 @@
       featured: fd.get("featured")==="1",
       bestseller: fd.get("bestseller")==="1",
       meeshoUrl: fd.get("meeshoUrl") || null,
-      images: listValue("images")||[],
+      images: images,
       colours: listValue("colours")||[],
       sizes: listValue("sizes")||[]
     };
     var action = form.getAttribute("action");
     var method = form.getAttribute("method")||"POST";
-    var btn = form.querySelector('button[type="submit"]');
-    var orig = btn.textContent;
     btn.textContent = "Saving…"; btn.disabled = true;
     try{
       var res = await fetch(action, {
