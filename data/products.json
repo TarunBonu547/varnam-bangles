@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-19T14:05:55.771Z",
+  "updatedAt": "2026-10-19T14:05:59.968Z",
   "products": [
     {
       "id": "maroon-stone",
@@ -288,7 +288,7 @@
       "id": "draft-test-product",
       "slug": "draft-test-product",
       "name": "Draft Test Product",
-      "description": "A draft product",
+      "description": "A draft product republished",
       "price": 200,
       "originalPrice": null,
       "images": [],
@@ -300,12 +300,12 @@
       "colours": [],
       "stockStatus": "in_stock",
       "available": true,
-      "published": false,
+      "published": true,
       "featured": false,
       "bestseller": false,
       "meeshoUrl": null,
-      "createdAt": "2026-10-19T14:05:55.771Z",
-      "updatedAt": "2026-10-19T14:05:55.771Z"
+      "updatedAt": "2026-10-19T14:05:59.968Z",
+      "createdAt": "2026-10-19T14:05:59.968Z"
     }
   ]
 }
