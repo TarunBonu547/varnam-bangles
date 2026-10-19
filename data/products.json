@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-19T05:37:41.307Z",
+  "updatedAt": "2026-10-19T05:38:37.465Z",
   "products": [
     {
       "id": "maroon-stone",
@@ -27,12 +27,12 @@
       ],
       "stockStatus": "in_stock",
       "available": true,
-      "published": true,
+      "published": false,
       "featured": false,
       "bestseller": true,
       "meeshoUrl": "https://www.meesho.com/",
-      "createdAt": "2026-01-10T00:00:00Z",
-      "updatedAt": "2026-01-10T00:00:00Z"
+      "updatedAt": "2026-10-19T05:38:37.465Z",
+      "createdAt": "2026-10-19T05:38:37.465Z"
     },
     {
       "id": "pink-glass",
